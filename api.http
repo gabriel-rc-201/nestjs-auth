@@ -10,6 +10,7 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJlbWFpbCI6ImFkbWluQG1haWwuY29tIiwiaWF0IjoxNzQzODk1MDMzLCJleHAiOjE3NDM5MjAyMzN9.Vjen8o8WRlzjKTTjj-0Df3cCUnM6PLtGjWfahMv1RS4
 
 ###
 GET http://localhost:3000/users/cm932mdxh00004pv9g0l824p9
