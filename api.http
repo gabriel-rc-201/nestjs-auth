@@ -13,3 +13,12 @@ GET http://localhost:3000/users
 
 ###
 GET http://localhost:3000/users/cm932mdxh00004pv9g0l824p9
+
+###
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@mail.com",
+    "password": "admin"
+}
