@@ -4,18 +4,24 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
+import { Roles } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 interface IPayload {
   name: string;
   email: string;
+  role: Roles;
+  sub: string;
 }
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private prismaService: PrismaService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
@@ -29,7 +35,15 @@ export class AuthGuard implements CanActivate {
       const payload = this.jwtService.verify<IPayload>(token, {
         algorithms: ['HS256'],
       });
-      // TODO: pegar o usuário e colocar na request;
+
+      const user = await this.prismaService.user.findUnique({
+        where: { id: payload.sub },
+      });
+      if (!user) {
+        throw new UnauthorizedException('user not authorized!');
+      }
+
+      request.user = user;
       return true;
     } catch (e) {
       console.error(e);
