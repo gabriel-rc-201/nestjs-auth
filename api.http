@@ -16,6 +16,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iL
 GET http://localhost:3000/users/cm932mdxh00004pv9g0l824p9
 
 ###
+# @name adminlongin
 POST http://localhost:3000/auth/login
 Content-Type: application/json
 
@@ -23,3 +24,22 @@ Content-Type: application/json
     "email": "admin@mail.com",
     "password": "admin"
 }
+
+###
+
+@tokenAdmin = {{ adminlongin.response.body.access_token }}
+
+###
+POST http://localhost:3000/posts
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+    "title": "Meu primeiro post",
+    "content": "este é o conteúdo do meu post",
+    "published": true
+}
+
+###
+GET http://localhost:3000/posts
+Authorization: Bearer {{tokenAdmin}}
