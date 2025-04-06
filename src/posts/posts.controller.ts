@@ -8,6 +8,7 @@ import {
   Delete,
   Req,
   UseGuards,
+  NotFoundException,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -40,8 +41,12 @@ export class PostsController {
 
   @RequiredRoles(Roles.EDITOR, Roles.WRITER, Roles.READER)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postsService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const post = await this.postsService.findOne(id);
+    if (!post) {
+      throw new NotFoundException(`Post with id ${id} not found`);
+    }
+    return post;
   }
 
   @RequiredRoles(Roles.EDITOR, Roles.WRITER)
